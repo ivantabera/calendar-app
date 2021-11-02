@@ -2,7 +2,8 @@ import React from 'react';
 import {
 BrowserRouter as Router,
 Switch,
-Route
+Route,
+Redirect
 } from "react-router-dom";
 import { LoginScreen } from '../components/auth/LoginScreen';
 import { CalendarScreen } from '../components/calendar/CalendarScreen';
@@ -12,12 +13,10 @@ export const AppRouter = () => {
         <Router>
             <div>
                 <Switch>
-                    <Route path="/login">
-                        <LoginScreen />
-                    </Route>
-                    <Route path="/">
-                        <CalendarScreen />
-                    </Route>
+                    <Route exact path="/login" component={ LoginScreen } />
+                    <Route exact path="/" component={ CalendarScreen } />
+
+                    <Redirect to="/" />
                 </Switch>
             </div>
         </Router>
