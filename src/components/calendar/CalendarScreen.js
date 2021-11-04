@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {Calendar, momentLocalizer} from 'react-big-calendar';
 import moment from 'moment';
 
@@ -6,6 +6,7 @@ import { Navbar } from '../ui/Navbar';
 
 /* Se utiliza messajes para cambiar los mensajes del big calendar */
 import { messages } from '../../helpers/calendar-messages-es';
+import { CalendarEvent } from './CalendarEvent';
 
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
@@ -21,10 +22,35 @@ const events = [{
     start: moment().toDate(),
     end: moment().add(2, 'hours').toDate(),
     bgcolor: '#fafafa',
-    notes: 'Comprar el pastel'
+    notes: 'Comprar el pastel',
+    user: {
+        _id: '123',
+        name: 'Ivan'
+    }
 }]
 
 export const CalendarScreen = () => {
+
+    /* Mantener el estado de una variable que cuando cambie, actualice los componentes */
+    const [lastView, setLastView] = useState( localStorage.setItem('lastView' || 'month' ) );
+
+    /* Cuando se realice el doble click en el calendario se dispara esta funcion */
+    const onDoubleClick = ( e ) => {
+        console.log('e', e)
+    }
+
+    /* Cuando se realice la seleccion de algun evento en el calendario */
+    const onSelect = ( e ) => {
+        console.log('e', e)
+    }
+
+    /* Cuando se cambia la vista del calendario entre Mes, Semana, Dia, Agenda */
+    const onViewChange = ( e ) => {
+        console.log('e', e)
+
+        setLastView( e );
+        localStorage.setItem('lastView', e);
+    }
 
     /* Esta funcion se va disparar con ciertos argumentos gracias al componente Calendar */
     const eventStylerGetter = ( event, start, end, isSelected ) => {
@@ -54,7 +80,17 @@ export const CalendarScreen = () => {
                 endAccessor="end"
                 messages={messages}
                 eventPropGetter={ eventStylerGetter }
+                onDoubleClickEvent={ onDoubleClick }
+                onSelectEvent={ onSelect }
+                onView={ onViewChange }
+                view={ lastView }
+
+                /* Components para personalizar el evento para el calendario */
+                components={{
+                    event : CalendarEvent
+                }}
             />
+
         </div>
     )
 }
