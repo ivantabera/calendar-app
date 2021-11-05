@@ -32,7 +32,7 @@ const events = [{
 export const CalendarScreen = () => {
 
     /* Mantener el estado de una variable que cuando cambie, actualice los componentes */
-    const [lastView, setLastView] = useState( localStorage.setItem('lastView' || 'month' ) );
+    const [lastView, setLastView] = useState( localStorage.getItem('lastView' || 'month' ) );
 
     /* Cuando se realice el doble click en el calendario se dispara esta funcion */
     const onDoubleClick = ( e ) => {
@@ -83,7 +83,7 @@ export const CalendarScreen = () => {
                 onDoubleClickEvent={ onDoubleClick }
                 onSelectEvent={ onSelect }
                 onView={ onViewChange }
-                view={ lastView }
+                view={ lastView || 'month' }
 
                 /* Components para personalizar el evento para el calendario */
                 components={{
