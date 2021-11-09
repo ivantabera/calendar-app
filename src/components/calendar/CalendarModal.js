@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import moment from 'moment';
 import Modal from 'react-modal';
 import DateTimePicker from 'react-datetime-picker';
-import moment from 'moment';
+import Swal from 'sweetalert2';
 
 const customStyles = {
     content: {
@@ -18,21 +19,26 @@ Modal.setAppElement('#root');
 
 /* Se define el startDate con una hora mas y se ocupa en el DateTimePicker */
 const now  = moment().minutes(0).seconds(0).add(1, 'hours');
-const end  = now.clone().add(1, 'hours');
+const nowPlus1  = now.clone().add(1, 'hours');
 
 export const CalendarModal = () => {
 
     const [dateStart, setDateStart] = useState( now.toDate() );
-    const [dateEnd, setDateEnd] = useState( end.toDate() );
+    const [dateEnd, setDateEnd] = useState( nowPlus1.toDate() );
 
+    /* Estado para validar el titulo */
+    const [titleValid, setTitleValid] = useState(true);
+
+    /* Obtener la informacion del formulario del evento */
     const [formValues, setFormValues] = useState({
         title:'Evento',
         notes:'',
         start:now.toDate(),
-        end:end.toDate()
+        end:nowPlus1.toDate()
     });
 
-    const { notes, title } = formValues;
+    /* Desestructuracion del formvalues para obtener las notes y el title */
+    const { notes, title, start, end  } = formValues;
 
     const handleInputChange = ({ target }) => {
         
@@ -44,7 +50,7 @@ export const CalendarModal = () => {
     }
 
     const closeModal = () => {
-        
+        //TODO cerrar el modal
     }
 
     const handleStartDateChange = ( e ) => {
@@ -66,6 +72,25 @@ export const CalendarModal = () => {
     const handleSubmitForm = ( e ) => {
         e.preventDefault();
         console.log('formValues', formValues)
+
+        /* Crear instancias de moment para trabajar con todas las comparaciones de fechas de esta libreria */
+        
+        const momentStart = moment( start );
+        const momentEnd = moment( end );
+
+        if ( momentStart.isSameOrAfter( momentEnd ) ) {
+            console.log('Fecha 2 debe de ser mayor');
+            return Swal.fire('Error', 'La fecha final debe ser mayor a la fecha de inicio', 'error');
+        }
+
+        if( title.trim().length < 2 ){
+            return setTitleValid( false );
+        }
+
+        //TODO realizar grabacion en BD
+
+        setTitleValid(true);
+        closeModal();
 
     }
 
@@ -110,7 +135,7 @@ export const CalendarModal = () => {
                     <label>Titulo y notas</label>
                     <input 
                         type="text" 
-                        className="form-control"
+                        className={`form-control ${!titleValid && 'is-invalid'}`}
                         placeholder="Título del evento"
                         name="title"
                         autoComplete="off"
