@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {Calendar, momentLocalizer} from 'react-big-calendar';
 import moment from 'moment';
 
+import { useDispatch } from 'react-redux'
 
 import { Navbar } from '../ui/Navbar';
 /* Se utiliza messajes para cambiar los mensajes del big calendar */
@@ -13,6 +14,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 /* Se utiliza para cambiar el idioma del big calendar */
 import 'moment/locale/es';
+import { uiOpenModal } from '../../actions/ui';
 moment.locale('es');
 
 const localizer = momentLocalizer(moment);
@@ -32,12 +34,14 @@ const events = [{
 
 export const CalendarScreen = () => {
 
+    const dispatch = useDispatch();
+
     /* Mantener el estado de una variable que cuando cambie, actualice los componentes */
     const [lastView, setLastView] = useState( localStorage.getItem('lastView' || 'month' ) );
 
-    /* Cuando se realice el doble click en el calendario se dispara esta funcion */
+    /* Cuando se realice el doble click en una actividad del calendario se dispara esta funcion */
     const onDoubleClick = ( e ) => {
-        console.log('e', e)
+        dispatch( uiOpenModal() );
     }
 
     /* Cuando se realice la seleccion de algun evento en el calendario */

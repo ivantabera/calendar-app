@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
 import moment from 'moment';
 import Modal from 'react-modal';
 import DateTimePicker from 'react-datetime-picker';
 import Swal from 'sweetalert2';
+
+import { uiCloseModal } from '../../actions/ui';
 
 const customStyles = {
     content: {
@@ -22,6 +25,10 @@ const now  = moment().minutes(0).seconds(0).add(1, 'hours');
 const nowPlus1  = now.clone().add(1, 'hours');
 
 export const CalendarModal = () => {
+    
+    /* useSelector para estar pendiente de los cambios en el state de redux */
+    const {modalOpen} = useSelector(state => state.ui);
+    const dispatch = useDispatch();
 
     const [dateStart, setDateStart] = useState( now.toDate() );
     const [dateEnd, setDateEnd] = useState( nowPlus1.toDate() );
@@ -49,8 +56,9 @@ export const CalendarModal = () => {
 
     }
 
+    /* Cerrar modal */
     const closeModal = () => {
-        //TODO cerrar el modal
+        dispatch( uiCloseModal() );
     }
 
     const handleStartDateChange = ( e ) => {
@@ -71,7 +79,6 @@ export const CalendarModal = () => {
     
     const handleSubmitForm = ( e ) => {
         e.preventDefault();
-        console.log('formValues', formValues)
 
         /* Crear instancias de moment para trabajar con todas las comparaciones de fechas de esta libreria */
         
@@ -79,7 +86,6 @@ export const CalendarModal = () => {
         const momentEnd = moment( end );
 
         if ( momentStart.isSameOrAfter( momentEnd ) ) {
-            console.log('Fecha 2 debe de ser mayor');
             return Swal.fire('Error', 'La fecha final debe ser mayor a la fecha de inicio', 'error');
         }
 
@@ -96,7 +102,7 @@ export const CalendarModal = () => {
 
     return (
         <Modal
-            isOpen={ true }
+            isOpen={ modalOpen }
             onRequestClose={ closeModal }
             style={ customStyles }
             closeTimeoutMS={ 200 }
