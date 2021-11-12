@@ -15,6 +15,8 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 /* Se utiliza para cambiar el idioma del big calendar */
 import 'moment/locale/es';
 import { uiOpenModal } from '../../actions/ui';
+import { eventSetActive } from '../../actions/events';
+import { AddNewFab } from '../ui/AddNewFab';
 moment.locale('es');
 
 const localizer = momentLocalizer(moment);
@@ -40,19 +42,18 @@ export const CalendarScreen = () => {
     const [lastView, setLastView] = useState( localStorage.getItem('lastView' || 'month' ) );
 
     /* Cuando se realice el doble click en una actividad del calendario se dispara esta funcion */
-    const onDoubleClick = ( e ) => {
+    const onDoubleClick = () => {
         dispatch( uiOpenModal() );
     }
 
     /* Cuando se realice la seleccion de algun evento en el calendario */
     const onSelect = ( e ) => {
-        console.log('e', e)
+        dispatch( eventSetActive( e ) )
+        dispatch( uiOpenModal() );
     }
 
     /* Cuando se cambia la vista del calendario entre Mes, Semana, Dia, Agenda */
     const onViewChange = ( e ) => {
-        console.log('e', e)
-
         setLastView( e );
         localStorage.setItem('lastView', e);
     }
@@ -95,6 +96,8 @@ export const CalendarScreen = () => {
                     event : CalendarEvent
                 }}
             />
+
+            <AddNewFab />
 
             <CalendarModal />
 
