@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {Calendar, momentLocalizer} from 'react-big-calendar';
 import moment from 'moment';
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Navbar } from '../ui/Navbar';
 /* Se utiliza messajes para cambiar los mensajes del big calendar */
@@ -21,22 +21,11 @@ moment.locale('es');
 
 const localizer = momentLocalizer(moment);
 
-/* Estructura del arreglo de objetos para los eventos del big calendar*/
-const events = [{
-    title: 'Cumpleaños ivan',
-    start: moment().toDate(),
-    end: moment().add(2, 'hours').toDate(),
-    bgcolor: '#fafafa',
-    notes: 'Comprar el pastel',
-    user: {
-        _id: '123',
-        name: 'Ivan'
-    }
-}]
-
 export const CalendarScreen = () => {
 
     const dispatch = useDispatch();
+    // TODO leer del store, los eventos
+    const { events } = useSelector(state => state.calendar)
 
     /* Mantener el estado de una variable que cuando cambie, actualice los componentes */
     const [lastView, setLastView] = useState( localStorage.getItem('lastView' || 'month' ) );
@@ -48,8 +37,7 @@ export const CalendarScreen = () => {
 
     /* Cuando se realice la seleccion de algun evento en el calendario */
     const onSelect = ( e ) => {
-        dispatch( eventSetActive( e ) )
-        dispatch( uiOpenModal() );
+        dispatch( eventSetActive( e ) );
     }
 
     /* Cuando se cambia la vista del calendario entre Mes, Semana, Dia, Agenda */
