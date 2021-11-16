@@ -5,6 +5,7 @@ const initialState = {
 
     events:[
         {
+            id: new Date().getTime(),
             title: 'Cumpleaños ivan',
             start: moment().toDate(),
             end: moment().add(2, 'hours').toDate(),
