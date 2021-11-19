@@ -55,9 +55,10 @@ export const CalendarModal = () => {
     /* Creamos el efecto para que este pendiente de los cambios del activeEvent */
     /* Las dependencias [activeEvent, setFormValues] si alguna cambia se vuelve a ejecutar el evento */
     useEffect(() => {
-        console.log('activeEvent', activeEvent)
         if( activeEvent ){
             setFormValues( activeEvent )
+        } else {
+            setFormValues( initEvent );
         }
     }, [activeEvent, setFormValues])
 
@@ -138,7 +139,7 @@ export const CalendarModal = () => {
             overlayClassName="modal-fondo"
         >
 
-            <h1> Nuevo evento </h1>
+            <h1> { activeEvent ? 'Editar Evento' : 'Nuevo evento'} </h1>
             <hr />
             <form 
                 className="container"

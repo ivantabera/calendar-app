@@ -15,8 +15,9 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 /* Se utiliza para cambiar el idioma del big calendar */
 import 'moment/locale/es';
 import { uiOpenModal } from '../../actions/ui';
-import { eventSetActive } from '../../actions/events';
+import { eventClearActiveEvent, eventSetActive } from '../../actions/events';
 import { AddNewFab } from '../ui/AddNewFab';
+import { DeleteEventFab } from '../ui/DeleteEventFab';
 moment.locale('es');
 
 const localizer = momentLocalizer(moment);
@@ -25,7 +26,7 @@ export const CalendarScreen = () => {
 
     const dispatch = useDispatch();
     // TODO leer del store, los eventos
-    const { events } = useSelector(state => state.calendar)
+    const { events, activeEvent } = useSelector(state => state.calendar);
 
     /* Mantener el estado de una variable que cuando cambie, actualice los componentes */
     const [lastView, setLastView] = useState( localStorage.getItem('lastView' || 'month' ) );
@@ -44,6 +45,10 @@ export const CalendarScreen = () => {
     const onViewChange = ( e ) => {
         setLastView( e );
         localStorage.setItem('lastView', e);
+    }
+
+    const onSelectSlot = () => {
+        dispatch( eventClearActiveEvent() );
     }
 
     /* Esta funcion se va disparar con ciertos argumentos gracias al componente Calendar */
@@ -76,6 +81,8 @@ export const CalendarScreen = () => {
                 eventPropGetter={ eventStylerGetter }
                 onDoubleClickEvent={ onDoubleClick }
                 onSelectEvent={ onSelect }
+                onSelectSlot={ onSelectSlot }
+                selectable={ true }
                 onView={ onViewChange }
                 view={ lastView || 'month' }
 
@@ -86,6 +93,9 @@ export const CalendarScreen = () => {
             />
 
             <AddNewFab />
+
+            { (activeEvent) && <DeleteEventFab /> }
+            
 
             <CalendarModal />
 
