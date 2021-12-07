@@ -14,6 +14,8 @@ export const AppRouter = () => {
 
     const dispatch = useDispatch();
 
+    /* Al usar este Hook, le estamos indicando a React que el componente 
+    tiene que hacer el dispatch después de renderizarse. */
     useEffect(() => {
         dispatch( startChecking() );
     }, [dispatch])
