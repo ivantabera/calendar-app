@@ -6,6 +6,7 @@ export const startLogin = ( email, password ) => {
 
     return async(dispatch) => {
         
+        /* Crear token al iniciar sesion */
         const resp = await fetchSinToken( 'auth', {email, password}, 'POST' );
         const body = await resp.json();
 
@@ -30,6 +31,7 @@ export const startRegister = ( name, email, password ) => {
 
     return async(dispatch) => {
 
+        /* Crear token al crear un usuario */
         const resp = await fetchSinToken( 'auth/new', {name, email, password}, 'POST' );
         const body = await resp.json();
 

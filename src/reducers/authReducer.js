@@ -17,6 +17,7 @@ export const authReducer = ( state = initialState, action ) => {
                 checking:false
             }
 
+        /* Renovar el token */
         case types.authChekingFinish:
             return {
                 ...state,
