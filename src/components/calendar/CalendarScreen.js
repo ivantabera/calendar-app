@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {Calendar, momentLocalizer} from 'react-big-calendar';
 import moment from 'moment';
 
@@ -15,7 +15,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 /* Se utiliza para cambiar el idioma del big calendar */
 import 'moment/locale/es';
 import { uiOpenModal } from '../../actions/ui';
-import { eventClearActiveEvent, eventSetActive } from '../../actions/events';
+import { eventClearActiveEvent, eventSetActive, eventStartLoading } from '../../actions/events';
 import { AddNewFab } from '../ui/AddNewFab';
 import { DeleteEventFab } from '../ui/DeleteEventFab';
 moment.locale('es');
@@ -30,6 +30,10 @@ export const CalendarScreen = () => {
 
     /* Mantener el estado de una variable que cuando cambie, actualice los componentes */
     const [lastView, setLastView] = useState( localStorage.getItem('lastView' || 'month' ) );
+
+    useEffect(() => {
+        dispatch( eventStartLoading() )
+    }, [dispatch])
 
     /* Cuando se realice el doble click en una actividad del calendario se dispara esta funcion */
     const onDoubleClick = () => {
