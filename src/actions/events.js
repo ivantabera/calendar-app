@@ -1,4 +1,5 @@
 import { fetchConToken } from "../helpers/fetch";
+import { prepararEventos } from "../helpers/prepararEventos";
 import { types } from "../types/types";
 
 /* Agregar un evento al calendario */
@@ -46,10 +47,10 @@ export const eventStartLoading = () => {
             const resp = await fetchConToken( 'events' );
             /* Convertimos la respuesta en json */
             const body = await resp.json();
-            /* Extraemos los eventos del body */
-            const event = body.eventos;
+            /* Extraemos los eventos del body y preparamos los Strings a objetos de tipo Date */
+            const event = prepararEventos(body.eventos);
 
-            // dispatch(eventLoaded(event));
+            dispatch(eventLoaded(event));
 
         } catch (error) {
             console.log('error', error);
