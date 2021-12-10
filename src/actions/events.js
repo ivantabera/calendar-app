@@ -135,3 +135,7 @@ export const eventSetActive = ( event ) => ({
 export const eventClearActiveEvent  = () => ({
     type:types.eventClearActiveEvent
 });
+
+export const eventLogout = () => ({
+    type:types.eventLogout
+})
